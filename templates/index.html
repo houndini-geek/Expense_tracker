@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+
+    <title>Expense Tracker - Dashboard</title>
+</head>
+<body>
+
+    <header>
+        <h1>My wallet</h1>
+        <div class="wallet">
+            <span>Income : ${{ summary.total_income }}</span> |
+            <span>Expense : ${{ summary.total_expense }}</span> |
+            <span>Balance : ${{ summary.balance }}</span>
+        </div>
+    </header>
+
+
+        <!-- Add Transaction Form -->
+         <div class="form-backdrop">
+            <form action="">
+                <div class="title">add a transaction</div>
+            </form>
+         </div>
+
+
+    <!-- Advanced Filters form -->
+     <div class="form-backdrop">
+        <form action="" class="amount-form">
+            <button class="close-btn" type="button" onclick="document.querySelector('.form-backdrop').classList.remove('active')">
+                <img src="/static/icons/x-circle.svg" alt=" Close advanced filters form icon">
+            </button>
+        <div class="title">Advanced Filters</div>
+        <div class="radio-handler">
+            <h3>Select Filter</h3>
+            <div class="radio-item">
+                <label for="all-filter">All</label>
+                <input type="radio" name="filter" id="all-filter" value="all" checked>
+            </div>
+            <div class="radio-item">
+                <label for="income-filter">Income</label>
+                <input type="radio" name="filter" id="income-filter" value="income">
+            </div>
+            <div class="radio-item">
+                <label for="date-filter">Expense</label>
+                <input type="radio" name="filter" id="date-filter" value="date">
+            </div>
+        </div>
+
+        <div class="radio-handler">
+            <h3>Sort By</h3>
+            <div class="radio-item">
+                <label for="larger-than-sort">Larger than</label>
+                <input type="radio" name="sort" id="larger-than-sort" value="larger-than" checked>
+            </div>
+            <div class="radio-item">
+                <label for="smaller-than-sort">Smaller than</label>
+                <input type="radio" name="sort" id="smaller-than-sort" value="smaller-than">
+            </div>
+            <div class="radio-item between-sort">
+                <label for="between-sort">Between</label>
+                <input type="radio" name="sort" id="between-sort" value="between">
+                <!-- <input type="text" name="between-min" placeholder="Min" required>
+                <input type="text" name="between-max" placeholder="Max" required> -->
+
+            </div>
+        </div>
+        <div class="inputs-handler">
+            <div class="input-item single-input">
+                <p class="filter-preview">
+                    select all "Income" transactions larger than : <span id="amount-preview">$0</span>
+                </p>
+                <input type="number" name="amount" id="amount-input" placeholder="Enter amount">
+            </div>
+            
+        </div>
+        <button type="submit">apply</button>
+     </form>
+     </div>
+    
+
+
+
+
+
+
+
+
+
+    <section id="records">
+        <div class="section-title">
+            <h2>Recent Transactions</h2>
+            <p>Total Transaction : {{ expenses | length }}</p>
+        </div>
+
+        <div class="filters-wrapper">
+            <div class="add-transaction-btn">
+                <button>
+                    <img src="/static/icons/plus-circle.svg" alt="Add new transaction icon">
+                    <p>New Transaction</p>
+                </button>
+            </div>
+
+            <div class="filter-type-btns">
+                <button class="filter-btn active" data-type="all">All</button>
+                <button class="filter-btn" data-type="income">Income</button>
+                <button class="filter-btn" data-type="expense">Expense</button>
+            </div>
+
+            <select name="filter" id="filter-category">
+                <option value="" disabled selected>Select a category</option>
+                {% for category in categories %}
+                <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+
+            <div class="advanced-filters-wrapper">
+                <div class="filters_">
+                    <button onclick="open_date_filter()"> 
+                        <img src="/static/icons/calendar.svg" alt="Date filter icon">
+                        <p>Filter by Date</p>
+                    </button>
+                    <button onclick="open_amount_filter()">
+                        <img src="/static/icons/coins.svg" alt="Amount filter icon">
+                        <p>Filter by Amount</p>
+                    </button>
+                </div>
+                <button class="advanced-filter-toggle">
+                    <img src="/static/icons/funnel-simple.svg" alt="Advanced filter icon">
+                    <p>Advanced Filters</p>
+                </button>
+            </div>
+        </div>
+    <div class="table-section">
+
+    <div class="tbl-header">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <thead>
+        <tr>
+          <th>Type</th>
+            <th>Amount ($)</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="tbl-content">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <tbody>   
+          <tbody>
+        {%  if expenses %}
+
+            {% for transaction in expenses %}
+                    <tr>
+                        <td>{{ transaction.type }}</td>
+                        <td>{{ transaction.amount }}</td>
+                        <td>{{ transaction.category }}</td>
+                        <td class="description">
+                            {{ transaction.description }}
+                        </td>
+                        <td>{{ transaction.date }}</td>
+                        <td class="actions">
+                            <button>
+                                <img src="/static/icons/pencil-simple-light.svg" alt="">
+                            </button>
+                            <a href="/deleteTransaction/{{ transaction.id }}">
+                                <img src="/static/icons/trash-simple-light.svg" alt="">
+                            </a>
+                        </td>
+                    </tr>
+            {% endfor %}
+         
+          
+
+        {% else %}
+             <span style="display: block; text-align:center; padding-top:2em;">No Transaction found</span>
+        {% endif %}
+         
+          
+           
+
+        
+        </tbody>
+      </tbody>
+    </table>
+  </div>
+  </div>
+
+
+
+
+
+    </section>
+
+
+
+
+    <script>
+          // JavaScript Open advanced filters amount form
+       function open_amount_filter() {
+       
+           document.querySelector('.form-backdrop').classList.add('active');
+       }
+    document.addEventListener('DOMContentLoaded',() => {
+
+       
+        const filter_category = document.getElementById('filter-category')
+
+           // JavaScript to handle filter button active state
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        const rows = Array.from(document.querySelectorAll('.tbl-content table tr'))
+
+        //console.log(rows[0].cells[0])
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove 'active' class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add 'active' class to the clicked button
+                button.classList.add('active');
+              
+                const filterType = button.getAttribute('data-type').toLocaleLowerCase();
+                
+                rows.forEach((row) => {
+                    rowCell = row.cells[0].textContent.toLowerCase()
+                    if(filterType === 'all' || filterType === rowCell){
+                        row.style.display = '';
+                    }else {
+                        row.style.display = 'none'
+                    }
+                })
+
+
+            });
+        });
+
+
+        // JavaScript Filter by Category
+        filter_category.addEventListener('change',(event) => {
+            const categorySelect = filter_category.value.toLowerCase()
+            rows.forEach((row) => {
+                  rowCell = row.cells[2].textContent.toLowerCase()
+                   if(categorySelect === 'all' || categorySelect === rowCell){
+                        row.style.display = '';
+                    }else {
+                        row.style.display = 'none'
+                    }
+
+            })
+            
+        })
+
+    
+
+
+        // JavaScript to handle show/hide advanced filters
+        const advancedFilterButton = document.querySelector('.advanced-filters-wrapper button.advanced-filter-toggle');
+       const advancedFilters = document.querySelector('.advanced-filters-wrapper .filters_');
+
+       advancedFilterButton.addEventListener('click', () => {
+           advancedFilters.classList.toggle('active');
+       });
+
+
+     
+
+
+
+       const amount_form = document.querySelector('.amount-form')
+
+       amount_form.addEventListener('submit',(e) => {
+        e.preventDefault()
+       })
+
+        });
+
+
+    </script>
+
+</body>
+</html>

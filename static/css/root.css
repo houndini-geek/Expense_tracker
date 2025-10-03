@@ -1,0 +1,34 @@
+/* Import Inter font from Google Fonts API */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+*,*::before,*::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* Color Palette */
+:root{
+    --color-primary: #006D77;
+    --color-secondary: #BFDBF7;
+    --color-accent: #E29578;
+    --color-background: #EDF6F9;
+    --color-text: #1C1B1B;
+    --secondary-text: #EAEAEA;
+    --color-border: #00adb5;
+    --font-family: 'Inter', sans-serif;
+    --max-width: 1200px;
+}
+
+button, input, select, textarea{
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+button{
+    cursor: pointer;
+    border: none;
+   
+}

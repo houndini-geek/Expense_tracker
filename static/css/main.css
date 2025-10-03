@@ -1,0 +1,392 @@
+@import './root.css';
+
+
+body{
+    font-family: var(--font-family);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+    max-width: var(--max-width);
+    margin: 0 auto 0;
+}
+
+header{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: start;
+    width: var(--max-width);
+    margin: 3% auto 0;
+}
+
+header h1{
+    color: var(--color-primary);
+    font-weight: 900;
+    text-transform: capitalize;
+}
+
+
+.wallet{
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    gap: 1em;
+}
+
+.wallet span{
+    font-weight: 400;
+    text-transform: capitalize;
+}
+
+
+
+#records {
+
+    width: var(--max-width);
+    margin: 5% auto 0;
+}
+
+#records .section-title {
+    width: 50%;
+    text-align: left;
+}
+
+#records .section-title h2 {
+     color: var(--color-primary);
+    font-weight: 900;
+    text-transform: capitalize;
+   
+}
+
+#records .section-title p {
+    font-weight: 400;
+    text-transform: capitalize;
+    margin-top: 0.2em;
+    font-size: 0.8em;
+}
+
+
+.filters-wrapper {
+
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 0.5em;
+    margin: 2% auto 0;
+}
+
+
+.add-transaction-btn button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em;
+    background-color: var(--color-primary);
+    color: var(--secondary-text);
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-type-btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+    background-color: #EAEAEA;
+    outline: 1px solid #83C5BE;
+    border-radius: 0.5em;
+    padding: 0.2em;
+}
+
+.filter-type-btns button {
+    background-color: transparent;
+    color: var(--color-text);
+    padding: 0.3em 1em;
+    border-radius: 5px;
+    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+    transition-duration: 0.3s;
+}
+
+.filter-type-btns button.active{
+    background-color: #83C5BE;
+    color: var(--color-text);
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.109, 1, 0.22, 1);
+}
+
+.filters-wrapper select {
+    outline: none;
+    border-radius:5px ;
+    padding: 0.6em 1em;
+    background-color: #EDF6F9;
+    border: 1px solid #C7C7C7;
+}
+
+.advanced-filters-wrapper {
+    position: relative;
+}
+
+.advanced-filters-wrapper button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+    background-color: #EDF6F9;
+    border: 1px solid #C7C7C7;
+    color: var(--color-text);
+    padding: 0.4em 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.advanced-filters-wrapper button img {
+
+    width: 1.5rem;
+    height: 1.5rem;
+    object-fit: contain;
+}
+
+.advanced-filters-wrapper .filters_{
+
+    position: absolute;
+    top: 120%;
+    left: 0;
+    width: 15rem;
+    background-color: var(--color-background);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.advanced-filters-wrapper .filters_.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.advanced-filters-wrapper .filters_ button {
+    background-color: transparent;
+    color: var(--color-text);
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+
+
+.form-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.form-backdrop.active {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.form-backdrop form {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    padding: 1em;
+    border-radius: 0.5em;
+    position: relative;
+}
+
+.form-backdrop .close-btn {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.form-backdrop .title {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-transform: capitalize;
+}
+
+.form-backdrop .radio-handler {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 1em;
+}
+
+
+.form-backdrop form .inputs-handler {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+}
+
+.inputs-handler p {
+    font-size: 0.9em;
+    color: var(--color-text);
+    text-transform: capitalize;
+}
+
+.inputs-handler .input-item {
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5em;
+    width: 100%;
+}
+.inputs-handler .input-item input {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #C7C7C7;
+    border-radius: 0.3em;
+    outline: none;
+}
+
+.radio-item {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 0.3em;
+    background-color: #EAEAEA;
+    padding: 0.6em 0.5em;
+}
+
+.form-backdrop form button[type="submit"] {
+    padding: 0.5em 1em;
+    width: 50%;
+    text-transform: capitalize;
+    background-color: var(--color-primary);
+    color: var(--secondary-text);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+
+
+
+.table-section {
+    width: 100%;
+    margin: 5% auto 0;
+}
+
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.tbl-header {
+  background-color: var(--color-secondary);
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+}
+
+.tbl-content {
+  height: 500px;
+  overflow-x: auto;
+  margin: 0.5% auto ;
+}
+
+
+.tbl-content .actions {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.tbl-content .actions a {
+  outline: none;
+  text-decoration: none;
+  color: var(--neutral-dark);
+}
+.tbl-content .actions a img {
+      width: 1.5em;
+    height: 1.5em;
+    object-fit: contain;
+}
+
+.tbl-header th {
+  padding: 20px 15px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+
+}
+
+.tbl-content td {
+  padding: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  font-weight: 400;
+  text-transform: capitalize;
+  text-align: left;
+  font-size: 1em;
+  background-color: #dae6f3;
+  color: var(--secondary-color);
+  transition: 0.2s ease-out;
+
+}
+
+.tbl-content tr{
+    min-height: 1rem;
+}
+
+.tbl-content td:hover {
+    background-color: var(--color-secondary);
+    transition: 0.2s ease-in;
+    border-radius: 0.2em;
+}
+.tbl-content td button {
+    background-color: transparent;
+    display: inline-block;
+    margin: 0.5em;
+}
+
+.tbl-content td button img {
+    width: 1.5em;
+    height: 1.5em;
+    object-fit: contain;
+}
+
+
+.tbl-content .description {
+    text-align: left;
+    word-break: break-all;
+}
