@@ -1,5 +1,6 @@
 /* Import Inter font from Google Fonts API */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 
 *,*::before,*::after{
     margin: 0;
@@ -17,7 +18,8 @@
     --color-text: #1C1B1B;
     --secondary-text: #EAEAEA;
     --color-border: #00adb5;
-    --font-family: 'Inter', sans-serif;
+    --font-family-body: "Quicksand", sans-serif;
+    --font-family-header: "Inter", sans-serif;
     --max-width: 1200px;
 }
 

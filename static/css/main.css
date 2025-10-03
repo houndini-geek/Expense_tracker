@@ -2,7 +2,7 @@
 
 
 body{
-    font-family: var(--font-family);
+    font-family: var(--font-family-body);
     background-color: var(--color-background);
     color: var(--color-text);
     line-height: 1.6;
@@ -23,6 +23,7 @@ header h1{
     color: var(--color-primary);
     font-weight: 900;
     text-transform: capitalize;
+    font-family: var(--font-family-header);
 }
 
 
@@ -34,7 +35,7 @@ header h1{
 }
 
 .wallet span{
-    font-weight: 400;
+    font-weight: 600;
     text-transform: capitalize;
 }
 
@@ -53,13 +54,14 @@ header h1{
 
 #records .section-title h2 {
      color: var(--color-primary);
-    font-weight: 900;
+     font-weight: 900;
+      font-family: var(--font-family-header);
     text-transform: capitalize;
    
 }
 
 #records .section-title p {
-    font-weight: 400;
+    font-weight: 600;
     text-transform: capitalize;
     margin-top: 0.2em;
     font-size: 0.8em;
@@ -82,6 +84,7 @@ header h1{
     justify-content: center;
     align-items: center;
     gap: 0.5em;
+    font-weight: 600;
     padding: 0.5em;
     background-color: var(--color-primary);
     color: var(--secondary-text);
@@ -95,8 +98,9 @@ header h1{
     justify-content: center;
     align-items: center;
     gap: 0.5em;
-    background-color: #EAEAEA;
-    outline: 1px solid #83C5BE;
+    background-color: var(--color-background);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+    outline: 1px solid #e5e8e8;
     border-radius: 0.5em;
     padding: 0.2em;
 }
@@ -105,6 +109,7 @@ header h1{
     background-color: transparent;
     color: var(--color-text);
     padding: 0.3em 1em;
+     font-weight: 500;
     border-radius: 5px;
     transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
     transition-duration: 0.3s;
@@ -112,6 +117,7 @@ header h1{
 
 .filter-type-btns button.active{
     background-color: #83C5BE;
+    font-weight: 600;
     color: var(--color-text);
     transition-duration: 0.3s;
     transition-timing-function: cubic-bezier(0.109, 1, 0.22, 1);
@@ -123,6 +129,7 @@ header h1{
     padding: 0.6em 1em;
     background-color: #EDF6F9;
     border: 1px solid #C7C7C7;
+     font-weight: 600;
 }
 
 .advanced-filters-wrapper {
@@ -138,6 +145,7 @@ header h1{
     border: 1px solid #C7C7C7;
     color: var(--color-text);
     padding: 0.4em 1em;
+     font-weight: 600;
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
@@ -305,15 +313,26 @@ header h1{
 table {
   width: 100%;
   table-layout: fixed;
-  border-collapse: collapse;
+  border-collapse:separate;
 }
 
 .tbl-header {
-  background-color: var(--color-secondary);
-  border-top-left-radius: 1em;
-  border-top-right-radius: 1em;
+  /* background-color: var(--color-secondary); */
+  background-color: #f7ffff;
+
+  
 }
 
+
+.tbl-header th {
+  padding: 20px 15px;
+  text-align: left;
+  font-weight: 800;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  font-family: var(--font-family-header);
+
+}
 .tbl-content {
   height: 500px;
   overflow-x: auto;
@@ -339,14 +358,7 @@ table {
     object-fit: contain;
 }
 
-.tbl-header th {
-  padding: 20px 15px;
-  text-align: left;
-  font-weight: 700;
-  font-size: 12px;
-  text-transform: uppercase;
 
-}
 
 .tbl-content td {
   padding: 1em;
@@ -354,11 +366,11 @@ table {
   text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: middle;
-  font-weight: 400;
+  font-weight: 500;
   text-transform: capitalize;
   text-align: left;
   font-size: 1em;
-  background-color: #dae6f3;
+  /* background-color: #dae6f3; */
   color: var(--secondary-color);
   transition: 0.2s ease-out;
 
@@ -368,7 +380,7 @@ table {
     min-height: 1rem;
 }
 
-.tbl-content td:hover {
+.tbl-content tr:hover {
     background-color: var(--color-secondary);
     transition: 0.2s ease-in;
     border-radius: 0.2em;

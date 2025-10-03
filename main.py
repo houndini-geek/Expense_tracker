@@ -1,9 +1,7 @@
-from flask import Flask , render_template,  redirect, url_for # type: ignore
-# import requests
+from flask import Flask , render_template,  redirect, url_for, request # type: ignore
+
 from db import connect_to_db
 app = Flask(__name__, template_folder="templates")
-
-
 
 
 
@@ -65,16 +63,54 @@ def expense_data(): # type: ignore
 
 
 
+def get_filter(filter_type,sort_type,amount_type): # type: ignore
+    try:
+        sort_by = '<=' if sort_type == 'smaller-than' else  '>='
+        conn = connect_to_db()
+        cursor = conn.cursor() # type: ignore
+        cursor.execute(f'SELECT * FROM expenses WHERE type = ? and amount {sort_by} ? ORDER BY amount DESC',(filter_type,amount_type,)) # type: ignore
+        rows = cursor.fetchall() # type: ignore
+          # Parse them into dicts
+        expenses = [ # type: ignore
+            {
+                "id": row[0],
+                "type": row[1],
+                "amount": row[2],
+                "category": row[3],
+                "description": row[4],
+                "date": row[5]
+            }
+            for row in rows # type: ignore
+        ] # type: ignore
+        return {
+            "expenses": expenses} # type: ignore
+    except Exception as e:
+        print(f"Failed to get rows: {e}")
 
-@app.route('/')
+
+
+
+@app.route('/',methods=['GET']) # type: ignore
 def home_page():
-    data = expense_data() # type: ignore
+    
+    filter_type = request.args.get('filter')
+    sort_type = request.args.get('sort')
+    amount_type = request.args.get('amount')
+  
+    transactions = None
+
+    if filter_type and sort_type and amount_type:
+        transactions = get_filter(filter_type, sort_type, amount_type) # type: ignore
+
+    data = expense_data()  # pyright: ignore[reportUnknownVariableType]
+
     return render_template(
         'index.html',
-        expenses=data["expenses"],
+        expenses=transactions['expenses'] if transactions else data['expenses'],
         categories=data["categories"],
-        summary=data["summary"]
+        summary=data["summary"] # type: ignore
     )
+        
 
 
 

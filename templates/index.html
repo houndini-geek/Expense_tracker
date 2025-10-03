@@ -15,19 +15,21 @@
     <header>
         <h1>My wallet</h1>
         <div class="wallet">
+            {% if summary %}
             <span>Income : ${{ summary.total_income }}</span> |
             <span>Expense : ${{ summary.total_expense }}</span> |
             <span>Balance : ${{ summary.balance }}</span>
+            {% endif %}
         </div>
     </header>
 
 
         <!-- Add Transaction Form -->
-         <div class="form-backdrop">
+         <!-- <div class="form-backdrop">
             <form action="">
                 <div class="title">add a transaction</div>
             </form>
-         </div>
+         </div> -->
 
 
     <!-- Advanced Filters form -->
@@ -45,11 +47,11 @@
             </div>
             <div class="radio-item">
                 <label for="income-filter">Income</label>
-                <input type="radio" name="filter" id="income-filter" value="income">
+                <input type="radio" name="filter" id="income-filter" value="Income">
             </div>
             <div class="radio-item">
                 <label for="date-filter">Expense</label>
-                <input type="radio" name="filter" id="date-filter" value="date">
+                <input type="radio" name="filter" id="date-filter" value="Expense">
             </div>
         </div>
 
@@ -102,22 +104,23 @@
         <div class="filters-wrapper">
             <div class="add-transaction-btn">
                 <button>
-                    <img src="/static/icons/plus-circle.svg" alt="Add new transaction icon">
-                    <p>New Transaction</p>
+                    <p>+ New Transaction</p>
                 </button>
-            </div>
+            </div> |
 
             <div class="filter-type-btns">
-                <button class="filter-btn active" data-type="all">All</button>
-                <button class="filter-btn" data-type="income">Income</button>
-                <button class="filter-btn" data-type="expense">Expense</button>
+                <button class="filter-btn active" data-type="all">All Transactions</button>
+                <button class="filter-btn" data-type="income">Incoming</button>
+                <button class="filter-btn" data-type="expense">Expenses</button>
             </div>
 
             <select name="filter" id="filter-category">
                 <option value="" disabled selected>Select a category</option>
+                {% if categories%}
                 {% for category in categories %}
                 <option value="{{ category }}">{{ category }}</option>
                 {% endfor %}
+                {% endif %}
             </select>
 
             <div class="advanced-filters-wrapper">
@@ -154,7 +157,7 @@
     </table>
   </div>
   <div class="tbl-content">
-    <table cellpadding="0" cellspacing="0" border="0">
+    <table cellpadding="0" cellspacing="1" border="0">
       <tbody>   
           <tbody>
         {%  if expenses %}
@@ -272,14 +275,6 @@
 
 
      
-
-
-
-       const amount_form = document.querySelector('.amount-form')
-
-       amount_form.addEventListener('submit',(e) => {
-        e.preventDefault()
-       })
 
         });
 
