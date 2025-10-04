@@ -157,37 +157,6 @@ header h1{
     object-fit: contain;
 }
 
-.advanced-filters-wrapper .filters_{
-
-    position: absolute;
-    top: 120%;
-    left: 0;
-    width: 15rem;
-    background-color: var(--color-background);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    z-index: 10;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.advanced-filters-wrapper .filters_.active {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.advanced-filters-wrapper .filters_ button {
-    background-color: transparent;
-    color: var(--color-text);
-    display: flex;
-    justify-content: left;
-    align-items: center;
-}
 
 
 
@@ -248,6 +217,21 @@ header h1{
     justify-content: left;
     align-items: center;
     gap: 1em;
+  
+}
+
+.radio-handler h3{
+    font-size: 1em;
+}
+
+.form-backdrop .radio-handler input[type='date']{
+    outline: none;
+    text-transform: uppercase;
+    padding: 0.3em 0;
+    width: 50%;
+    text-align: center;
+     background-color: var(--color-background);
+     border: none;
 }
 
 
@@ -282,18 +266,33 @@ header h1{
     outline: none;
 }
 
+
+.inputs-handler .double-inputs {
+    width: 100%;
+    display: none;
+}
+
+.inputs-handler .double-inputs input {
+    margin-top: 0.3em;
+}
+
+
 .radio-item {
     display: flex;
     justify-content: left;
     align-items: center;
     gap: 0.3em;
-    background-color: #EAEAEA;
+    background-color: var(--color-background);
+    font-weight: 600;
     padding: 0.6em 0.5em;
+    font-size: 0.9em;
+    
 }
 
 .form-backdrop form button[type="submit"] {
-    padding: 0.5em 1em;
-    width: 50%;
+    padding: 0.7em 1em;
+    width: 100%;
+    font-weight: 600;
     text-transform: capitalize;
     background-color: var(--color-primary);
     color: var(--secondary-text);

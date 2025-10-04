@@ -7,7 +7,9 @@ app = Flask(__name__, template_folder="templates")
 
 
 # Retrieve and display data from the database on the homepage
-def expense_data(): # type: ignore
+from typing import Dict, Any
+
+def expense_data() -> Dict[str, Any]:
     try:
         conn = connect_to_db()
         cursor = conn.cursor() # type: ignore
@@ -44,7 +46,8 @@ def expense_data(): # type: ignore
         
 
         cursor.close() # type: ignore
-        conn.close() # type: ignore
+        if conn:
+            conn.close()
 
         # Return both in a structured way
         return {
@@ -61,16 +64,74 @@ def expense_data(): # type: ignore
         print(f"Failed to show records: {e}")
         return {"expenses": [], "categories": [], "summary": {"total_income": 0, "total_expense": 0, "balance": 0}} # type: ignore
 
+from typing import Any, Dict, List, Optional
 
-
-def get_filter(filter_type,sort_type,amount_type): # type: ignore
+def get_filter(
+    filter_type: Optional[str] = None,
+    sort_type: Optional[str] = None,
+    amount: Optional[float] = None,
+    category: Optional[str] = None,
+    min_amount: Optional[float] = None,
+    max_amount: Optional[float] = None,
+    date_: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    order_by: str = "date"  # "date" or "amount"
+) -> Dict[str, List[Dict[str, Any]]]:
     try:
-        sort_by = '<=' if sort_type == 'smaller-than' else  '>='
         conn = connect_to_db()
         cursor = conn.cursor() # type: ignore
-        cursor.execute(f'SELECT * FROM expenses WHERE type = ? and amount {sort_by} ? ORDER BY amount DESC',(filter_type,amount_type,)) # type: ignore
+
+        # Start query
+        query = "SELECT * FROM expenses WHERE 1=1"
+        params = []
+
+        # Type filter
+        if filter_type:
+            query += " AND type = ?"
+            params.append(filter_type) # type: ignore
+
+        # Category filter
+        if category:
+            query += " AND category = ?"
+            params.append(category) # type: ignore
+
+        # Exact amount or compare
+        if amount and not (min_amount and max_amount):
+            if sort_type == 'smaller-than':
+                query += " AND amount <= ?"
+            elif sort_type == 'greater-than':
+                query += " AND amount >= ?"
+            else:  # exact
+                query += " AND amount = ?"
+            params.append(amount) # type: ignore
+
+        # Between range
+        if min_amount and max_amount:
+            query += " AND amount BETWEEN ? AND ?"
+            params.extend([min_amount, max_amount]) # type: ignore
+
+        # Exact date
+        if date_:
+            query += " AND expense_date = ?"
+            params.append(date_) # type: ignore
+
+        # Date range
+        if start_date and end_date:
+            query += " AND expense_date BETWEEN ? AND ?"
+            params.extend([start_date, end_date]) # type: ignore
+
+        # Sorting
+        if order_by == "amount":
+            query += " ORDER BY amount DESC"
+        else:  # default by date
+            query += " ORDER BY expense_date DESC"
+
+        # Execute
+        cursor.execute(query, tuple(params)) # type: ignore
         rows = cursor.fetchall() # type: ignore
-          # Parse them into dicts
+
+        # Parse into dicts
         expenses = [ # type: ignore
             {
                 "id": row[0],
@@ -81,12 +142,16 @@ def get_filter(filter_type,sort_type,amount_type): # type: ignore
                 "date": row[5]
             }
             for row in rows # type: ignore
-        ] # type: ignore
-        return {
-            "expenses": expenses} # type: ignore
-    except Exception as e:
-        print(f"Failed to get rows: {e}")
+        ]
 
+        cursor.close() # type: ignore
+        conn.close() # type: ignore
+
+        return {"expenses": expenses} # type: ignore
+
+    except Exception as e:
+        print(f"❌ Failed to get rows: {e}")
+        return {"expenses": []} # type: ignore
 
 
 
@@ -95,14 +160,31 @@ def home_page():
     
     filter_type = request.args.get('filter')
     sort_type = request.args.get('sort')
-    amount_type = request.args.get('amount')
-  
+    amount = request.args.get('amount')
+    category = request.args.get('category')
+    min_amount = request.args.get('min_amount')
+    max_amount = request.args.get('max_amount')
+    date_ = request.args.get('date')
+    
+    # Convert to float if not None and not empty
+    amount_float = float(amount) if amount not in (None, "") else None
+    min_amount_float = float(min_amount) if min_amount not in (None, "") else None
+    max_amount_float = float(max_amount) if max_amount not in (None, "") else None
+
     transactions = None
 
-    if filter_type and sort_type and amount_type:
-        transactions = get_filter(filter_type, sort_type, amount_type) # type: ignore
+    if filter_type and sort_type and amount:
+        transactions = get_filter( # type: ignore
+            filter_type,
+            sort_type,
+            amount_float,
+            category,
+            min_amount_float,
+            max_amount_float,
+            date_
+            ) # type: ignore
 
-    data = expense_data()  # pyright: ignore[reportUnknownVariableType]
+    data = expense_data()  
 
     return render_template(
         'index.html',

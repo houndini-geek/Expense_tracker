@@ -40,7 +40,7 @@
             </button>
         <div class="title">Advanced Filters</div>
         <div class="radio-handler">
-            <h3>Select Filter</h3>
+            <h3>Filter by : </h3>
             <div class="radio-item">
                 <label for="all-filter">All</label>
                 <input type="radio" name="filter" id="all-filter" value="all" checked>
@@ -51,38 +51,58 @@
             </div>
             <div class="radio-item">
                 <label for="date-filter">Expense</label>
-                <input type="radio" name="filter" id="date-filter" value="Expense">
+                <input type="radio"  name="filter" id="date-filter" value="Expense">
             </div>
         </div>
 
         <div class="radio-handler">
-            <h3>Sort By</h3>
+            <h3>Sort By :</h3>
             <div class="radio-item">
                 <label for="larger-than-sort">Larger than</label>
-                <input type="radio" name="sort" id="larger-than-sort" value="larger-than" checked>
+                <input type="radio"   class="radio" name="sort" id="larger-than-sort" value="larger-than" checked>
             </div>
             <div class="radio-item">
                 <label for="smaller-than-sort">Smaller than</label>
-                <input type="radio" name="sort" id="smaller-than-sort" value="smaller-than">
+                <input type="radio"   class="radio" name="sort" id="smaller-than-sort" value="smaller-than">
             </div>
             <div class="radio-item between-sort">
                 <label for="between-sort">Between</label>
-                <input type="radio" name="sort" id="between-sort" value="between">
-                <!-- <input type="text" name="between-min" placeholder="Min" required>
-                <input type="text" name="between-max" placeholder="Max" required> -->
-
+                <input type="radio"  class="radio"  name="sort" id="between-sort" value="between">
             </div>
         </div>
+
+        <div class="radio-handler">
+            <h3>Category :</h3>
+            <select name="category" id="">
+                <option value="" disabled selected>Select a category</option>
+                {% if categories%}
+                {% for category in categories %}
+                <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+                {% endif %} 
+            </select>
+          
+        </div>
+
+        <div class="radio-handler date_input">
+            <h3>Select date :</h3>
+            <input type="date" name="date" id="date-picker">
+        </div>
+        <p class="filter-preview">
+            select all "Income" transactions larger than : <span id="amount-preview">$0</span>
+        </p>
         <div class="inputs-handler">
             <div class="input-item single-input">
-                <p class="filter-preview">
-                    select all "Income" transactions larger than : <span id="amount-preview">$0</span>
-                </p>
                 <input type="number" name="amount" id="amount-input" placeholder="Enter amount">
+            </div>
+
+            <div class="input-item double-inputs remove">
+                <input type="number" name="min_amount" id="amount-input_1" placeholder="Min">
+                <input type="number" name="max_amount" id="amount-input_2" placeholder="Max">
             </div>
             
         </div>
-        <button type="submit">apply</button>
+        <button type="submit">apply filters</button>
      </form>
      </div>
     
@@ -124,19 +144,10 @@
             </select>
 
             <div class="advanced-filters-wrapper">
-                <div class="filters_">
-                    <button onclick="open_date_filter()"> 
-                        <img src="/static/icons/calendar.svg" alt="Date filter icon">
-                        <p>Filter by Date</p>
-                    </button>
-                    <button onclick="open_amount_filter()">
-                        <img src="/static/icons/coins.svg" alt="Amount filter icon">
-                        <p>Filter by Amount</p>
-                    </button>
-                </div>
-                <button class="advanced-filter-toggle">
+              
+                <button class="advanced-filter" onclick="open_filters_form()">
                     <img src="/static/icons/funnel-simple.svg" alt="Advanced filter icon">
-                    <p>Advanced Filters</p>
+                    <p>Filters</p>
                 </button>
             </div>
         </div>
@@ -209,10 +220,32 @@
 
     <script>
           // JavaScript Open advanced filters amount form
-       function open_amount_filter() {
+       function open_filters_form() {
        
            document.querySelector('.form-backdrop').classList.add('active');
        }
+
+
+       const SortByRadios = document.querySelectorAll('.radio-handler .radio')
+       const DbInputs= document.querySelector('.double-inputs')
+       const SingleInputs= document.querySelector('.single-input')
+
+       SortByRadios.forEach((radio) => {
+       radio.addEventListener('change',(event) => {
+
+        val = event.target.value
+
+        if (val == 'between'){
+            DbInputs.style.display = 'block'
+
+            SingleInputs.style.display = 'none'
+        }else{
+            DbInputs.style.display = 'none'
+            SingleInputs.style.display = 'block'
+
+        }
+       })
+       })
     document.addEventListener('DOMContentLoaded',() => {
 
        
@@ -264,14 +297,6 @@
 
     
 
-
-        // JavaScript to handle show/hide advanced filters
-        const advancedFilterButton = document.querySelector('.advanced-filters-wrapper button.advanced-filter-toggle');
-       const advancedFilters = document.querySelector('.advanced-filters-wrapper .filters_');
-
-       advancedFilterButton.addEventListener('click', () => {
-           advancedFilters.classList.toggle('active');
-       });
 
 
      
