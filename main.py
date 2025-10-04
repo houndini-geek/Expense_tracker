@@ -1,5 +1,10 @@
 from flask import Flask , render_template,  redirect, url_for, request # type: ignore
 
+from rich.traceback import Traceback
+from rich.console import Console
+
+console = Console()
+
 from db import connect_to_db
 app = Flask(__name__, template_folder="templates")
 
@@ -64,20 +69,17 @@ def expense_data() -> Dict[str, Any]:
         print(f"Failed to show records: {e}")
         return {"expenses": [], "categories": [], "summary": {"total_income": 0, "total_expense": 0, "balance": 0}} # type: ignore
 
-from typing import Any, Dict, List, Optional
 
-def get_filter(
-    filter_type: Optional[str] = None,
-    sort_type: Optional[str] = None,
-    amount: Optional[float] = None,
-    category: Optional[str] = None,
-    min_amount: Optional[float] = None,
-    max_amount: Optional[float] = None,
-    date_: Optional[str] = None,
-    start_date: Optional[str] = None,
-    end_date: Optional[str] = None,
+def get_filter( # type: ignore
+    filter_type=None, # type: ignore
+    sort_type=None, # type: ignore
+    amount=None, # type: ignore
+    category=None, # type: ignore
+    min_amount=None, # type: ignore
+    max_amount=None, # type: ignore
+    date_=None, # type: ignore
     order_by: str = "date"  # "date" or "amount"
-) -> Dict[str, List[Dict[str, Any]]]:
+):
     try:
         conn = connect_to_db()
         cursor = conn.cursor() # type: ignore
@@ -87,17 +89,17 @@ def get_filter(
         params = []
 
         # Type filter
-        if filter_type:
-            query += " AND type = ?"
+        if filter_type is not None and filter_type != "":
+            query += " AND LOWER(type) = LOWER(?)"
             params.append(filter_type) # type: ignore
 
         # Category filter
-        if category:
-            query += " AND category = ?"
+        if category is not None and category != "":
+            query += " AND LOWER(category) = LOWER(?)"
             params.append(category) # type: ignore
 
         # Exact amount or compare
-        if amount and not (min_amount and max_amount):
+        if amount is not None and not (min_amount and max_amount):
             if sort_type == 'smaller-than':
                 query += " AND amount <= ?"
             elif sort_type == 'greater-than':
@@ -107,19 +109,14 @@ def get_filter(
             params.append(amount) # type: ignore
 
         # Between range
-        if min_amount and max_amount:
+        if min_amount is not None and max_amount is not None:
             query += " AND amount BETWEEN ? AND ?"
             params.extend([min_amount, max_amount]) # type: ignore
 
         # Exact date
-        if date_:
+        if date_ is not None and date_ != "":
             query += " AND expense_date = ?"
             params.append(date_) # type: ignore
-
-        # Date range
-        if start_date and end_date:
-            query += " AND expense_date BETWEEN ? AND ?"
-            params.extend([start_date, end_date]) # type: ignore
 
         # Sorting
         if order_by == "amount":
@@ -127,7 +124,9 @@ def get_filter(
         else:  # default by date
             query += " ORDER BY expense_date DESC"
 
-        # Execute
+        console.print('DEBUG SQL:', query)
+        console.print('DEBUG PARAMS:', params)
+      
         cursor.execute(query, tuple(params)) # type: ignore
         rows = cursor.fetchall() # type: ignore
 
@@ -149,10 +148,9 @@ def get_filter(
 
         return {"expenses": expenses} # type: ignore
 
-    except Exception as e:
-        print(f"❌ Failed to get rows: {e}")
+    except Exception:
+        console.print(Traceback(show_locals=True))
         return {"expenses": []} # type: ignore
-
 
 
 @app.route('/',methods=['GET']) # type: ignore

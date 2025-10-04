@@ -134,6 +134,10 @@ header h1{
 
 .advanced-filters-wrapper {
     position: relative;
+    display: flex;
+    justify-content: cente;
+    align-items: center;
+    gap: 0.3em;
 }
 
 .advanced-filters-wrapper button {
@@ -155,6 +159,12 @@ header h1{
     width: 1.5rem;
     height: 1.5rem;
     object-fit: contain;
+}
+
+.advanced-filters-wrapper a{
+    text-transform: capitalize;
+    text-decoration: overline;
+    color: var(--color-text);
 }
 
 
